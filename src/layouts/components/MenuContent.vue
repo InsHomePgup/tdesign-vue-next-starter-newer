@@ -11,7 +11,7 @@ type ListItemType = MenuRoute
 const { navData } = defineProps({
   navData: {
     type: Array as PropType<MenuRoute[]>,
-    default: () => [],
+    default: (): MenuRoute[] => [],
   },
 })
 
