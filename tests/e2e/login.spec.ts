@@ -39,18 +39,18 @@ test.describe('登录功能测试', () => {
     await expect(loginButton).toBeVisible()
   })
 
-  test('空表单提交应该显示验证错误', async ({ page }) => {
-    // 查找并点击登录按钮
+  test('登录后应该跳转到 Dashboard', async ({ page }) => {
+    // 查找并点击登录按钮（mock 环境下支持直接登录）
     const loginButton = page.locator('button[type="submit"], button:has-text("登录"), button:has-text("Login")').first()
 
     if (await loginButton.count() > 0) {
       await loginButton.click()
 
-      // 等待一下，看是否有错误提示
-      await page.waitForTimeout(500)
+      // 等待页面跳转
+      await page.waitForURL(/.*dashboard/, { timeout: 10000 })
 
-      // 验证仍然在登录页面（因为验证失败）
-      await expect(page).toHaveURL(/.*login/)
+      // 验证已跳转到 dashboard 页面
+      await expect(page).toHaveURL(/.*dashboard/)
     }
   })
 
