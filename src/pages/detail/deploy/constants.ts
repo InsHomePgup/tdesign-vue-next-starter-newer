@@ -79,4 +79,4 @@ export const BASE_INFO_DATA = [
     value: 'istio_test',
     type: null,
   },
-];
+]

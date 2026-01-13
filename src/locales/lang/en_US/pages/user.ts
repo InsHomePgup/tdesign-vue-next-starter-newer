@@ -20,4 +20,4 @@ export default {
   visitData: 'Visit Data',
   teamMember: 'Team Member',
   serviceProduction: 'Service Product',
-};
+}

@@ -1,3 +1,37 @@
+<script setup lang="ts">
+import type { NotificationItem } from '@/types/interface'
+import { storeToRefs } from 'pinia'
+
+import { useRouter } from 'vue-router'
+import { t } from '@/locales'
+import { useNotificationStore } from '@/store'
+
+const router = useRouter()
+const store = useNotificationStore()
+const { msgData, unreadMsg } = storeToRefs(store)
+
+const setRead = (type: string, item?: NotificationItem) => {
+  const changeMsg = msgData.value
+  if (type === 'all') {
+    changeMsg.forEach((e) => {
+      e.status = false
+    })
+  }
+  else {
+    changeMsg.forEach((e) => {
+      if (e.id === item?.id) {
+        e.status = false
+      }
+    })
+  }
+  store.setMsgData(changeMsg)
+}
+
+const goDetail = () => {
+  router.push('/detail/secondary')
+}
+</script>
+
 <template>
   <t-popup expand-animation placement="bottom-right" trigger="click">
     <template #content>
@@ -10,16 +44,23 @@
             variant="text"
             theme="primary"
             @click="setRead('all')"
-            >{{ t('layout.notice.clear') }}</t-button
           >
+            {{ t('layout.notice.clear') }}
+          </t-button>
         </div>
         <t-list v-if="unreadMsg.length > 0" class="narrow-scrollbar" :split="false">
           <t-list-item v-for="(item, index) in unreadMsg" :key="index">
             <div>
-              <p class="msg-content">{{ item.content }}</p>
-              <p class="msg-type">{{ item.type }}</p>
+              <p class="msg-content">
+                {{ item.content }}
+              </p>
+              <p class="msg-type">
+                {{ item.type }}
+              </p>
             </div>
-            <p class="msg-time">{{ item.date }}</p>
+            <p class="msg-time">
+              {{ item.date }}
+            </p>
             <template #action>
               <t-button size="small" variant="outline" @click="setRead('radio', item)">
                 {{ t('layout.notice.setRead') }}
@@ -29,13 +70,13 @@
         </t-list>
 
         <div v-else class="empty-list">
-          <img src="https://tdesign.gtimg.com/pro-template/personal/nothing.png" alt="空" />
+          <img src="https://tdesign.gtimg.com/pro-template/personal/nothing.png" alt="空">
           <p>{{ t('layout.notice.empty') }}</p>
         </div>
         <div v-if="unreadMsg.length > 0" class="header-msg-bottom">
-          <t-button class="header-msg-bottom-link" variant="text" theme="default" block @click="goDetail">{{
-            t('layout.notice.viewAll')
-          }}</t-button>
+          <t-button class="header-msg-bottom-link" variant="text" theme="default" block @click="goDetail">
+            {{ t('layout.notice.viewAll') }}
+          </t-button>
         </div>
       </div>
     </template>
@@ -46,38 +87,7 @@
     </t-badge>
   </t-popup>
 </template>
-<script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useRouter } from 'vue-router';
 
-import { t } from '@/locales';
-import { useNotificationStore } from '@/store';
-import type { NotificationItem } from '@/types/interface';
-
-const router = useRouter();
-const store = useNotificationStore();
-const { msgData, unreadMsg } = storeToRefs(store);
-
-const setRead = (type: string, item?: NotificationItem) => {
-  const changeMsg = msgData.value;
-  if (type === 'all') {
-    changeMsg.forEach((e) => {
-      e.status = false;
-    });
-  } else {
-    changeMsg.forEach((e) => {
-      if (e.id === item?.id) {
-        e.status = false;
-      }
-    });
-  }
-  store.setMsgData(changeMsg);
-};
-
-const goDetail = () => {
-  router.push('/detail/secondary');
-};
-</script>
 <style lang="less" scoped>
 .header-msg {
   width: 400px;

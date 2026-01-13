@@ -24,4 +24,4 @@ export default {
     verification: 'verification code is require',
   },
   sendVerification: 'send',
-};
+}

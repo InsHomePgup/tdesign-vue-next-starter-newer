@@ -1,3 +1,18 @@
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+  },
+})
+</script>
+
 <template>
   <div class="operator-block operator-gap">
     <div class="operator-content">
@@ -37,20 +52,7 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
 
-export default defineComponent({
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
-  },
-});
-</script>
 <style lang="less" scoped>
 .operator-block {
   position: relative;

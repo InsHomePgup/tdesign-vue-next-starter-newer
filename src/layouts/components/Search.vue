@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+import { t } from '@/locales'
+
+defineProps({
+  layout: {
+    type: String,
+    default: '',
+  },
+})
+
+const isSearchFocus = ref(false)
+const searchData = ref('')
+const changeSearchFocus = (value: boolean) => {
+  if (!value) {
+    searchData.value = ''
+  }
+  isSearchFocus.value = value
+}
+</script>
+
 <template>
   <div v-if="layout === 'side'" class="header-menu-search">
     <t-input
@@ -37,27 +59,7 @@
     </t-input>
   </div>
 </template>
-<script setup lang="ts">
-import { ref } from 'vue';
 
-import { t } from '@/locales';
-
-defineProps({
-  layout: {
-    type: String,
-    default: '',
-  },
-});
-
-const isSearchFocus = ref(false);
-const searchData = ref('');
-const changeSearchFocus = (value: boolean) => {
-  if (!value) {
-    searchData.value = '';
-  }
-  isSearchFocus.value = value;
-};
-</script>
 <style lang="less" scoped>
 .header-menu-search {
   display: flex;

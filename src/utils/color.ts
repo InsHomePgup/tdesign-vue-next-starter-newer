@@ -1,9 +1,9 @@
-import type * as echarts from 'echarts/core';
-import trim from 'lodash/trim';
-import { Color } from 'tvision-color';
+import type * as echarts from 'echarts/core'
+import type { TColorToken } from '@/config/color'
+import type { ModeType } from '@/types/interface'
 
-import type { TColorToken } from '@/config/color';
-import type { ModeType } from '@/types/interface';
+import trim from 'lodash/trim'
+import { Color } from 'tvision-color'
 
 /**
  * 依据主题类型获取颜色
@@ -12,19 +12,19 @@ import type { ModeType } from '@/types/interface';
  * @returns {Array<string>} themeColorList
  */
 export function getColorFromTheme(): Array<string> {
-  const theme = trim(getComputedStyle(document.documentElement).getPropertyValue('--td-brand-color'));
+  const theme = trim(getComputedStyle(document.documentElement).getPropertyValue('--td-brand-color'))
   const themeColorList = Color.getRandomPalette({
     color: theme,
     colorGamut: 'bright',
     number: 8,
-  });
+  })
 
-  return themeColorList;
+  return themeColorList
 }
 
 /** 图表颜色 */
 export function getChartListColor(): Array<string> {
-  return getColorFromTheme();
+  return getColorFromTheme()
 }
 
 /**
@@ -35,18 +35,18 @@ export function getChartListColor(): Array<string> {
  */
 export function changeChartsTheme(chartsList: echarts.EChartsType[]): void {
   if (chartsList && chartsList.length) {
-    const chartChangeColor = getChartListColor();
+    const chartChangeColor = getChartListColor()
 
     for (let index = 0; index < chartsList.length; index++) {
-      const elementChart = chartsList[index];
+      const elementChart = chartsList[index]
 
       if (elementChart) {
-        const optionVal = elementChart.getOption();
+        const optionVal = elementChart.getOption()
 
         // 更改主题颜色
-        optionVal.color = chartChangeColor;
+        optionVal.color = chartChangeColor
 
-        elementChart.setOption(optionVal, true);
+        elementChart.setOption(optionVal, true)
       }
     }
   }
@@ -56,15 +56,15 @@ export function changeChartsTheme(chartsList: echarts.EChartsType[]): void {
  * 根据当前主题色、模式等情景 计算最后生成的色阶
  */
 export function generateColorMap(theme: string, colorPalette: Array<string>, mode: ModeType, brandColorIdx: number) {
-  const isDarkMode = mode === 'dark';
+  const isDarkMode = mode === 'dark'
 
   if (isDarkMode) {
     colorPalette.reverse().map((color) => {
-      const [h, s, l] = Color.colorTransform(color, 'hex', 'hsl');
-      return Color.colorTransform([h, Number(s) - 4, l], 'hsl', 'hex');
-    });
-    brandColorIdx = 5;
-    colorPalette[0] = `${colorPalette[brandColorIdx]}20`;
+      const [h, s, l] = Color.colorTransform(color, 'hex', 'hsl')
+      return Color.colorTransform([h, Number(s) - 4, l], 'hsl', 'hex')
+    })
+    brandColorIdx = 5
+    colorPalette[0] = `${colorPalette[brandColorIdx]}20`
   }
 
   const colorMap: TColorToken = {
@@ -79,19 +79,19 @@ export function generateColorMap(theme: string, colorPalette: Array<string>, mod
     '--td-brand-color-8': colorPalette[brandColorIdx], // 主题色
     '--td-brand-color-9': brandColorIdx > 8 ? theme : colorPalette[brandColorIdx + 1], // click
     '--td-brand-color-10': colorPalette[9],
-  };
-  return colorMap;
+  }
+  return colorMap
 }
 
 /**
  * 将生成的样式嵌入头部
  */
 export function insertThemeStylesheet(theme: string, colorMap: TColorToken, mode: ModeType) {
-  const isDarkMode = mode === 'dark';
-  const root = !isDarkMode ? `:root[theme-color='${theme}']` : `:root[theme-color='${theme}'][theme-mode='dark']`;
+  const isDarkMode = mode === 'dark'
+  const root = !isDarkMode ? `:root[theme-color='${theme}']` : `:root[theme-color='${theme}'][theme-mode='dark']`
 
-  const styleSheet = document.createElement('style');
-  styleSheet.type = 'text/css';
+  const styleSheet = document.createElement('style')
+  styleSheet.type = 'text/css'
   styleSheet.textContent = `${root}{
     --td-brand-color: ${colorMap['--td-brand-color']};
     --td-brand-color-1: ${colorMap['--td-brand-color-1']};
@@ -104,7 +104,7 @@ export function insertThemeStylesheet(theme: string, colorMap: TColorToken, mode
     --td-brand-color-8: ${colorMap['--td-brand-color-8']};
     --td-brand-color-9: ${colorMap['--td-brand-color-9']};
     --td-brand-color-10: ${colorMap['--td-brand-color-10']};
-  }`;
+  }`
 
-  document.head.appendChild(styleSheet);
+  document.head.appendChild(styleSheet)
 }

@@ -1,23 +1,31 @@
+<script setup lang="ts">
+import { t } from '@/locales'
+
+defineOptions({
+  name: 'ResultSuccess',
+})
+</script>
+
 <template>
   <div class="result-success">
     <t-icon class="result-success-icon" name="check-circle" />
-    <div class="result-success-title">{{ t('pages.result.success.title') }}</div>
-    <div class="result-success-describe">{{ t('pages.result.success.subtitle') }}</div>
+    <div class="result-success-title">
+      {{ t('pages.result.success.title') }}
+    </div>
+    <div class="result-success-describe">
+      {{ t('pages.result.success.subtitle') }}
+    </div>
     <div>
       <t-button theme="default" @click="() => $router.push('/detail/advanced')">
         {{ t('pages.result.success.progress') }}
       </t-button>
-      <t-button @click="() => $router.push('/dashboard/base')"> {{ t('pages.result.success.back') }} </t-button>
+      <t-button @click="() => $router.push('/dashboard/base')">
+        {{ t('pages.result.success.back') }}
+      </t-button>
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { t } from '@/locales';
 
-defineOptions({
-  name: 'ResultSuccess',
-});
-</script>
 <style lang="less" scoped>
 .result-success {
   display: flex;

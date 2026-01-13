@@ -40,4 +40,4 @@ export default {
       delete: '删除',
     },
   },
-};
+}

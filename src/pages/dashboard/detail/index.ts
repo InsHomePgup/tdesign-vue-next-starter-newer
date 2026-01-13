@@ -1,9 +1,9 @@
-import dayjs from 'dayjs';
+import type { TChartColor } from '@/config/color'
 
-import type { TChartColor } from '@/config/color';
-import { t } from '@/locales';
-import { getDateArray, getRandomArray } from '@/utils/charts';
-import { getChartListColor } from '@/utils/color';
+import dayjs from 'dayjs'
+import { t } from '@/locales'
+import { getDateArray, getRandomArray } from '@/utils/charts'
+import { getChartListColor } from '@/utils/color'
 
 /**
  * 散点图数据
@@ -16,26 +16,27 @@ export function getScatterDataSet({
   placeholderColor,
   borderColor,
 }: { dateTime?: Array<string> } & TChartColor) {
-  const divideNum = 40;
-  const timeArray = [];
-  const inArray = [];
-  const outArray = [];
+  const divideNum = 40
+  const timeArray = []
+  const inArray = []
+  const outArray = []
   for (let i = 0; i < divideNum; i++) {
     // const [timeArray, inArray, outArray] = dataset;
     if (dateTime.length > 0) {
-      const dateAbsTime: number = (new Date(dateTime[1]).getTime() - new Date(dateTime[0]).getTime()) / divideNum;
-      const endTime: number = new Date(dateTime[0]).getTime() + dateAbsTime * i;
-      timeArray.push(dayjs(endTime).format('MM-DD'));
-    } else {
+      const dateAbsTime: number = (new Date(dateTime[1]).getTime() - new Date(dateTime[0]).getTime()) / divideNum
+      const endTime: number = new Date(dateTime[0]).getTime() + dateAbsTime * i
+      timeArray.push(dayjs(endTime).format('MM-DD'))
+    }
+    else {
       timeArray.push(
         dayjs()
           .subtract(divideNum - i, 'day')
           .format('MM-DD'),
-      );
+      )
     }
 
-    inArray.push(getRandomArray().toString());
-    outArray.push(getRandomArray().toString());
+    inArray.push(getRandomArray().toString())
+    outArray.push(getRandomArray().toString())
   }
 
   return {
@@ -114,7 +115,7 @@ export function getScatterDataSet({
         type: 'scatter',
       },
     ],
-  };
+  }
 }
 
 /** 折线图数据 */
@@ -123,13 +124,13 @@ export function getFolderLineDataSet({
   placeholderColor,
   borderColor,
 }: { dateTime?: Array<string> } & TChartColor) {
-  let dateArray = [];
+  let dateArray = []
   for (let i = 1; i < 7; i++) {
-    dateArray.push(t(`pages.dashboardDetail.chart.week${i}`));
+    dateArray.push(t(`pages.dashboardDetail.chart.week${i}`))
   }
   if (dateTime.length > 0) {
-    const divideNum = 7;
-    dateArray = getDateArray(dateTime, divideNum);
+    const divideNum = 7
+    dateArray = getDateArray(dateTime, divideNum)
   }
   return {
     color: getChartListColor(),
@@ -268,5 +269,5 @@ export function getFolderLineDataSet({
         },
       },
     ],
-  };
+  }
 }

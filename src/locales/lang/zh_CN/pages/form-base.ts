@@ -24,4 +24,4 @@ export default {
   notaryPublic: '公证人',
   confirm: '确认提交',
   cancel: '取消',
-};
+}

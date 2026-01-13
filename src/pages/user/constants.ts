@@ -1,7 +1,7 @@
 export interface UserInfoListType {
-  title: string;
-  content: string;
-  span?: number;
+  title: string
+  content: string
+  span?: number
 }
 
 export const USER_INFO_LIST: Array<UserInfoListType> = [
@@ -42,7 +42,7 @@ export const USER_INFO_LIST: Array<UserInfoListType> = [
     content: '腾讯/腾讯公司/某事业群/某产品部/某运营中心/商户服务组',
     span: 6,
   },
-];
+]
 
 export const TEAM_MEMBERS = [
   {
@@ -65,6 +65,6 @@ export const TEAM_MEMBERS = [
     title: 'Lovellzhang 商某某',
     description: '产品运营 港澳拓展组员工',
   },
-];
+]
 
-export const PRODUCT_LIST = ['a', 'b', 'c', 'd'];
+export const PRODUCT_LIST = ['a', 'b', 'c', 'd']

@@ -35,4 +35,4 @@ export default {
     reset: '重置',
     query: '查询',
   },
-};
+}

@@ -1,13 +1,54 @@
+<script setup lang="ts">
+import type { PropType } from 'vue'
+import {
+  AddIcon,
+  CalendarIcon,
+  LaptopIcon,
+  MoreIcon,
+  ServiceIcon,
+  ShopIcon,
+  UserAvatarIcon,
+} from 'tdesign-icons-vue-next'
+
+import { t } from '@/locales'
+
+export interface CardProductType {
+  type: number
+  isSetup: boolean
+  description: string
+  name: string
+}
+
+const props = defineProps({
+  product: {
+    type: Object as PropType<CardProductType>,
+    default: undefined,
+  },
+})
+
+const emit = defineEmits(['manage-product', 'delete-item'])
+
+const typeMap = ['A', 'B', 'C', 'D', 'E']
+
+const handleClickManage = (product: CardProductType) => {
+  emit('manage-product', product)
+}
+
+const handleClickDelete = (product: CardProductType) => {
+  emit('delete-item', product)
+}
+</script>
+
 <template>
   <t-card theme="poster2" :bordered="false">
     <template #avatar>
       <t-avatar size="56px">
         <template #icon>
-          <shop-icon v-if="props.product.type === 1" />
-          <calendar-icon v-if="props.product.type === 2" />
-          <service-icon v-if="props.product.type === 3" />
-          <user-avatar-icon v-if="props.product.type === 4" />
-          <laptop-icon v-if="props.product.type === 5" />
+          <ShopIcon v-if="props.product.type === 1" />
+          <CalendarIcon v-if="props.product.type === 2" />
+          <ServiceIcon v-if="props.product.type === 3" />
+          <UserAvatarIcon v-if="props.product.type === 4" />
+          <LaptopIcon v-if="props.product.type === 5" />
         </template>
       </t-avatar>
     </template>
@@ -17,15 +58,19 @@
       </t-tag>
     </template>
     <template #content>
-      <p class="list-card-item_detail--name">{{ props.product.name }}</p>
-      <p class="list-card-item_detail--desc">{{ props.product.description }}</p>
+      <p class="list-card-item_detail--name">
+        {{ props.product.name }}
+      </p>
+      <p class="list-card-item_detail--desc">
+        {{ props.product.description }}
+      </p>
     </template>
     <template #footer>
       <t-avatar-group cascading="left-up" :max="2">
         <t-avatar>{{ typeMap[product.type - 1] }}</t-avatar>
-        <t-avatar
-          ><template #icon>
-            <add-icon />
+        <t-avatar>
+          <template #icon>
+            <AddIcon />
           </template>
         </t-avatar>
       </t-avatar-group>
@@ -48,52 +93,13 @@
         ]"
       >
         <t-button theme="default" :disabled="!props.product.isSetup" shape="square" variant="text">
-          <more-icon />
+          <MoreIcon />
         </t-button>
       </t-dropdown>
     </template>
   </t-card>
 </template>
-<script setup lang="ts">
-import {
-  AddIcon,
-  CalendarIcon,
-  LaptopIcon,
-  MoreIcon,
-  ServiceIcon,
-  ShopIcon,
-  UserAvatarIcon,
-} from 'tdesign-icons-vue-next';
-import type { PropType } from 'vue';
 
-import { t } from '@/locales';
-
-export interface CardProductType {
-  type: number;
-  isSetup: boolean;
-  description: string;
-  name: string;
-}
-
-const props = defineProps({
-  product: {
-    type: Object as PropType<CardProductType>,
-    default: undefined,
-  },
-});
-
-const emit = defineEmits(['manage-product', 'delete-item']);
-
-const typeMap = ['A', 'B', 'C', 'D', 'E'];
-
-const handleClickManage = (product: CardProductType) => {
-  emit('manage-product', product);
-};
-
-const handleClickDelete = (product: CardProductType) => {
-  emit('delete-item', product);
-};
-</script>
 <style lang="less" scoped>
 .list-card-item {
   display: flex;

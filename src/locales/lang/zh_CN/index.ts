@@ -1,8 +1,8 @@
-import componentsLocale from 'tdesign-vue-next/es/locale/zh_CN';
+import componentsLocale from 'tdesign-vue-next/es/locale/zh_CN'
 
-import components from './components';
-import layout from './layout';
-import pages from './pages';
+import components from './components'
+import layout from './layout'
+import pages from './pages'
 
 export default {
   lang: '简体中文',
@@ -44,4 +44,4 @@ export default {
     },
   },
   componentsLocale,
-};
+}

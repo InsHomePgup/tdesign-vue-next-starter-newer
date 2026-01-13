@@ -1,3 +1,112 @@
+<script setup lang="ts">
+import type { PopupVisibleChangeContext } from 'tdesign-vue-next'
+import { useClipboard } from '@vueuse/core'
+import { MessagePlugin } from 'tdesign-vue-next'
+import { computed, onMounted, ref, watchEffect } from 'vue'
+
+import SettingAutoIcon from '@/assets/assets-setting-auto.svg'
+import SettingDarkIcon from '@/assets/assets-setting-dark.svg'
+import SettingLightIcon from '@/assets/assets-setting-light.svg'
+import ColorContainer from '@/components/color/index.vue'
+import Thumbnail from '@/components/thumbnail/index.vue'
+import { DEFAULT_COLOR_OPTIONS } from '@/config/color'
+import STYLE_CONFIG from '@/config/style'
+import { t } from '@/locales'
+import { useSettingStore } from '@/store'
+
+const settingStore = useSettingStore()
+
+const LAYOUT_OPTION = ['side', 'top', 'mix']
+
+const MODE_OPTIONS = [
+  { type: 'light', text: t('layout.setting.theme.options.light') },
+  { type: 'dark', text: t('layout.setting.theme.options.dark') },
+  { type: 'auto', text: t('layout.setting.theme.options.auto') },
+]
+
+const initStyleConfig = () => {
+  const styleConfig = STYLE_CONFIG
+  for (const key in styleConfig) {
+    if (Object.prototype.hasOwnProperty.call(styleConfig, key)) {
+      (styleConfig[key as keyof typeof STYLE_CONFIG] as any) = settingStore[key as keyof typeof STYLE_CONFIG]
+    }
+  }
+
+  return styleConfig
+}
+
+const dynamicColor = computed(() => {
+  const isDynamic = DEFAULT_COLOR_OPTIONS.includes(formData.value.brandTheme)
+  return isDynamic ? formData.value.brandTheme : ''
+})
+const formData = ref({ ...initStyleConfig() })
+const isColoPickerDisplay = ref(false)
+
+const showSettingPanel = computed({
+  get() {
+    return settingStore.showSettingPanel
+  },
+  set(newVal: boolean) {
+    settingStore.updateConfig({
+      showSettingPanel: newVal,
+    })
+  },
+})
+
+const changeColor = (hex: string) => {
+  formData.value.brandTheme = hex
+}
+
+onMounted(() => {
+  document.querySelector('.dynamic-color-btn').addEventListener('click', () => {
+    isColoPickerDisplay.value = true
+  })
+})
+
+const onPopupVisibleChange = (visible: boolean, context: PopupVisibleChangeContext) => {
+  if (!visible && context.trigger === 'document') {
+    isColoPickerDisplay.value = visible
+  }
+}
+
+const handleCopy = () => {
+  const sourceText = JSON.stringify(formData.value, null, 4)
+  const { copy } = useClipboard({ source: sourceText })
+  copy()
+    .then(() => {
+      MessagePlugin.closeAll()
+      MessagePlugin.success('复制成功')
+    })
+    .catch(() => {
+      MessagePlugin.closeAll()
+      MessagePlugin.error('复制失败')
+    })
+}
+const getModeIcon = (mode: string) => {
+  if (mode === 'light') {
+    return SettingLightIcon
+  }
+  if (mode === 'dark') {
+    return SettingDarkIcon
+  }
+  return SettingAutoIcon
+}
+
+const handleCloseDrawer = () => {
+  settingStore.updateConfig({
+    showSettingPanel: false,
+  })
+}
+
+const getThumbnailUrl = (name: string): string => {
+  return `https://tdesign.gtimg.com/tdesign-pro/setting/${name}.png`
+}
+
+watchEffect(() => {
+  if (formData.value.brandTheme) settingStore.updateConfig(formData.value)
+})
+</script>
+
 <template>
   <t-drawer
     v-model:visible="showSettingPanel"
@@ -10,22 +119,28 @@
   >
     <div class="setting-container">
       <t-form :data="formData" label-align="left">
-        <div class="setting-group-title">{{ t('layout.setting.theme.mode') }}</div>
+        <div class="setting-group-title">
+          {{ t('layout.setting.theme.mode') }}
+        </div>
         <t-radio-group v-model="formData.mode">
           <div v-for="(item, index) in MODE_OPTIONS" :key="index" class="setting-layout-drawer">
             <div>
-              <t-radio-button :key="index" :value="item.type"
-                ><component :is="getModeIcon(item.type)"
-              /></t-radio-button>
-              <p :style="{ textAlign: 'center', marginTop: '8px' }">{{ item.text }}</p>
+              <t-radio-button :key="index" :value="item.type">
+                <component :is="getModeIcon(item.type)" />
+              </t-radio-button>
+              <p :style="{ textAlign: 'center', marginTop: '8px' }">
+                {{ item.text }}
+              </p>
             </div>
           </div>
         </t-radio-group>
-        <div class="setting-group-title">{{ t('layout.setting.theme.color') }}</div>
+        <div class="setting-group-title">
+          {{ t('layout.setting.theme.color') }}
+        </div>
         <t-radio-group v-model="formData.brandTheme">
           <div v-for="(item, index) in DEFAULT_COLOR_OPTIONS" :key="index" class="setting-layout-drawer">
             <t-radio-button :key="index" :value="item" class="setting-layout-color-group">
-              <color-container :value="item" />
+              <ColorContainer :value="item" />
             </t-radio-button>
           </div>
           <div class="setting-layout-drawer">
@@ -47,16 +162,18 @@
                 />
               </template>
               <t-radio-button :value="dynamicColor" class="setting-layout-color-group dynamic-color-btn">
-                <color-container :value="dynamicColor" />
+                <ColorContainer :value="dynamicColor" />
               </t-radio-button>
             </t-popup>
           </div>
         </t-radio-group>
-        <div class="setting-group-title">{{ t('layout.setting.navigationLayout') }}</div>
+        <div class="setting-group-title">
+          {{ t('layout.setting.navigationLayout') }}
+        </div>
         <t-radio-group v-model="formData.layout">
           <div v-for="(item, index) in LAYOUT_OPTION" :key="index" class="setting-layout-drawer">
             <t-radio-button :key="index" :value="item">
-              <thumbnail :src="getThumbnailUrl(item)" />
+              <Thumbnail :src="getThumbnailUrl(item)" />
             </t-radio-button>
           </div>
         </t-radio-group>
@@ -68,7 +185,9 @@
           <t-switch v-model="formData.isSidebarFixed" />
         </t-form-item>
 
-        <div class="setting-group-title">{{ t('layout.setting.element.title') }}</div>
+        <div class="setting-group-title">
+          {{ t('layout.setting.element.title') }}
+        </div>
         <t-form-item :label="t('layout.setting.sideMode')" name="sideMode">
           <t-radio-group v-model="formData.sideMode" class="side-mode-radio">
             <t-radio-button key="light" value="light" :label="t('layout.setting.theme.options.light')" />
@@ -89,10 +208,10 @@
           <t-switch v-model="formData.showFooter" />
         </t-form-item>
         <t-form-item :label="t('layout.setting.element.useTagTabs')" name="isUseTabsRouter">
-          <t-switch v-model="formData.isUseTabsRouter"></t-switch>
+          <t-switch v-model="formData.isUseTabsRouter" />
         </t-form-item>
         <t-form-item :label="t('layout.setting.element.menuAutoCollapsed')" name="menuAutoCollapsed">
-          <t-switch v-model="formData.menuAutoCollapsed"></t-switch>
+          <t-switch v-model="formData.menuAutoCollapsed" />
         </t-form-item>
       </t-form>
       <div class="setting-info">
@@ -104,114 +223,7 @@
     </div>
   </t-drawer>
 </template>
-<script setup lang="ts">
-import { useClipboard } from '@vueuse/core';
-import type { PopupVisibleChangeContext } from 'tdesign-vue-next';
-import { MessagePlugin } from 'tdesign-vue-next';
-import { computed, onMounted, ref, watchEffect } from 'vue';
 
-import SettingAutoIcon from '@/assets/assets-setting-auto.svg';
-import SettingDarkIcon from '@/assets/assets-setting-dark.svg';
-import SettingLightIcon from '@/assets/assets-setting-light.svg';
-import ColorContainer from '@/components/color/index.vue';
-import Thumbnail from '@/components/thumbnail/index.vue';
-import { DEFAULT_COLOR_OPTIONS } from '@/config/color';
-import STYLE_CONFIG from '@/config/style';
-import { t } from '@/locales';
-import { useSettingStore } from '@/store';
-
-const settingStore = useSettingStore();
-
-const LAYOUT_OPTION = ['side', 'top', 'mix'];
-
-const MODE_OPTIONS = [
-  { type: 'light', text: t('layout.setting.theme.options.light') },
-  { type: 'dark', text: t('layout.setting.theme.options.dark') },
-  { type: 'auto', text: t('layout.setting.theme.options.auto') },
-];
-
-const initStyleConfig = () => {
-  const styleConfig = STYLE_CONFIG;
-  for (const key in styleConfig) {
-    if (Object.prototype.hasOwnProperty.call(styleConfig, key)) {
-      (styleConfig[key as keyof typeof STYLE_CONFIG] as any) = settingStore[key as keyof typeof STYLE_CONFIG];
-    }
-  }
-
-  return styleConfig;
-};
-
-const dynamicColor = computed(() => {
-  const isDynamic = DEFAULT_COLOR_OPTIONS.includes(formData.value.brandTheme);
-  return isDynamic ? formData.value.brandTheme : '';
-});
-const formData = ref({ ...initStyleConfig() });
-const isColoPickerDisplay = ref(false);
-
-const showSettingPanel = computed({
-  get() {
-    return settingStore.showSettingPanel;
-  },
-  set(newVal: boolean) {
-    settingStore.updateConfig({
-      showSettingPanel: newVal,
-    });
-  },
-});
-
-const changeColor = (hex: string) => {
-  formData.value.brandTheme = hex;
-};
-
-onMounted(() => {
-  document.querySelector('.dynamic-color-btn').addEventListener('click', () => {
-    isColoPickerDisplay.value = true;
-  });
-});
-
-const onPopupVisibleChange = (visible: boolean, context: PopupVisibleChangeContext) => {
-  if (!visible && context.trigger === 'document') {
-    isColoPickerDisplay.value = visible;
-  }
-};
-
-const handleCopy = () => {
-  const sourceText = JSON.stringify(formData.value, null, 4);
-  const { copy } = useClipboard({ source: sourceText });
-  copy()
-    .then(() => {
-      MessagePlugin.closeAll();
-      MessagePlugin.success('复制成功');
-    })
-    .catch(() => {
-      MessagePlugin.closeAll();
-      MessagePlugin.error('复制失败');
-    });
-};
-const getModeIcon = (mode: string) => {
-  if (mode === 'light') {
-    return SettingLightIcon;
-  }
-  if (mode === 'dark') {
-    return SettingDarkIcon;
-  }
-  return SettingAutoIcon;
-};
-
-const handleCloseDrawer = () => {
-  settingStore.updateConfig({
-    showSettingPanel: false,
-  });
-};
-
-const getThumbnailUrl = (name: string): string => {
-  return `https://tdesign.gtimg.com/tdesign-pro/setting/${name}.png`;
-};
-
-watchEffect(() => {
-  if (formData.value.brandTheme) settingStore.updateConfig(formData.value);
-});
-</script>
 <!-- teleport导致drawer 内 scoped样式问题无法生效 先规避下 -->
 <!-- eslint-disable-next-line vue-scoped-css/enforce-style-type -->
 <style lang="less">

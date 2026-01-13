@@ -1,22 +1,12 @@
-<template>
-  <div class="result-container">
-    <div class="result-bg-img">
-      <component :is="dynamicComponent"></component>
-    </div>
-    <div class="result-title">{{ title }}</div>
-    <div class="result-tip">{{ tip }}</div>
-    <slot />
-  </div>
-</template>
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
-import Result403Icon from '@/assets/assets-result-403.svg?component';
-import Result404Icon from '@/assets/assets-result-404.svg?component';
-import Result500Icon from '@/assets/assets-result-500.svg?component';
-import ResultIeIcon from '@/assets/assets-result-ie.svg?component';
-import ResultMaintenanceIcon from '@/assets/assets-result-maintenance.svg?component';
-import ResultWifiIcon from '@/assets/assets-result-wifi.svg?component';
+import Result403Icon from '@/assets/assets-result-403.svg?component'
+import Result404Icon from '@/assets/assets-result-404.svg?component'
+import Result500Icon from '@/assets/assets-result-500.svg?component'
+import ResultIeIcon from '@/assets/assets-result-ie.svg?component'
+import ResultMaintenanceIcon from '@/assets/assets-result-maintenance.svg?component'
+import ResultWifiIcon from '@/assets/assets-result-wifi.svg?component'
 
 const { type } = defineProps({
   bgUrl: {
@@ -35,27 +25,43 @@ const { type } = defineProps({
     type: String,
     default: '',
   },
-});
+})
 
 const dynamicComponent = computed(() => {
   switch (type) {
     case '403':
-      return Result403Icon;
+      return Result403Icon
     case '404':
-      return Result404Icon;
+      return Result404Icon
     case '500':
-      return Result500Icon;
+      return Result500Icon
     case 'ie':
-      return ResultIeIcon;
+      return ResultIeIcon
     case 'wifi':
-      return ResultWifiIcon;
+      return ResultWifiIcon
     case 'maintenance':
-      return ResultMaintenanceIcon;
+      return ResultMaintenanceIcon
     default:
-      return Result403Icon;
+      return Result403Icon
   }
-});
+})
 </script>
+
+<template>
+  <div class="result-container">
+    <div class="result-bg-img">
+      <component :is="dynamicComponent" />
+    </div>
+    <div class="result-title">
+      {{ title }}
+    </div>
+    <div class="result-tip">
+      {{ tip }}
+    </div>
+    <slot />
+  </div>
+</template>
+
 <style lang="less" scoped>
 .result {
   &-link {

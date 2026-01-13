@@ -41,4 +41,4 @@ export default {
     thisMonth: '本月',
     lastMonth: '上月',
   },
-};
+}

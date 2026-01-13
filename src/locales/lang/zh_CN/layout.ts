@@ -51,4 +51,4 @@ export default {
       fail: '复制失败',
     },
   },
-};
+}

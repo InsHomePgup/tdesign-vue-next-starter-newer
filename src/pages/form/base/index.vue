@@ -1,3 +1,46 @@
+<script setup lang="ts">
+import type { SubmitContext, UploadFailContext, UploadFile } from 'tdesign-vue-next'
+import { MessagePlugin } from 'tdesign-vue-next'
+import { ref } from 'vue'
+
+import { t } from '@/locales'
+
+import { FORM_RULES, INITIAL_DATA, PARTY_A_OPTIONS, PARTY_B_OPTIONS, TYPE_OPTIONS } from './constants'
+
+defineOptions({
+  name: 'FormBase',
+})
+
+const formData = ref({ ...INITIAL_DATA })
+
+const onReset = () => {
+  MessagePlugin.warning('取消新建')
+}
+const onSubmit = (ctx: SubmitContext) => {
+  if (ctx.validateResult === true) {
+    MessagePlugin.success('新建成功')
+  }
+}
+const beforeUpload = (file: UploadFile) => {
+  if (!/\.pdf$/.test(file.name)) {
+    MessagePlugin.warning('请上传pdf文件')
+    return false
+  }
+  if (file.size > 60 * 1024 * 1024) {
+    MessagePlugin.warning('上传文件不能大于60M')
+    return false
+  }
+  return true
+}
+const handleFail = (options: UploadFailContext) => {
+  MessagePlugin.error(`文件 ${options.file.name} 上传失败`)
+}
+// 用于格式化接口响应值，error 会被用于上传失败的提示文字；url 表示文件/图片地址
+const formatResponse = (res: any) => {
+  return { ...res, error: '上传失败，请重试', url: res.url }
+}
+</script>
+
 <template>
   <t-form
     class="base-form"
@@ -10,7 +53,9 @@
   >
     <div class="form-basic-container">
       <div class="form-basic-item">
-        <div class="form-basic-container-title">{{ t('pages.formBase.title') }}</div>
+        <div class="form-basic-container-title">
+          {{ t('pages.formBase.title') }}
+        </div>
         <!-- 表单内容 -->
 
         <!-- 合同名称,合同类型 -->
@@ -34,8 +79,12 @@
           <t-col :span="8">
             <t-form-item :label="t('pages.formBase.contractPayType')" name="payment">
               <t-radio-group v-model="formData.payment">
-                <t-radio value="1"> {{ t('pages.formBase.receive') }} </t-radio>
-                <t-radio value="2"> {{ t('pages.formBase.pay') }} </t-radio>
+                <t-radio value="1">
+                  {{ t('pages.formBase.receive') }}
+                </t-radio>
+                <t-radio value="2">
+                  {{ t('pages.formBase.pay') }}
+                </t-radio>
               </t-radio-group>
               <span class="space-item" />
               <div>
@@ -126,7 +175,9 @@
           </t-col>
         </t-row>
 
-        <div class="form-basic-container-title form-title-gap">{{ t('pages.formBase.otherInfo') }}</div>
+        <div class="form-basic-container-title form-title-gap">
+          {{ t('pages.formBase.otherInfo') }}
+        </div>
 
         <t-form-item :label="t('pages.formBase.remark')" name="comment">
           <t-textarea v-model="formData.comment" :height="124" :placeholder="t('pages.formBase.remarkPlaceholder')" />
@@ -155,48 +206,7 @@
     </div>
   </t-form>
 </template>
-<script setup lang="ts">
-import type { SubmitContext, UploadFailContext, UploadFile } from 'tdesign-vue-next';
-import { MessagePlugin } from 'tdesign-vue-next';
-import { ref } from 'vue';
 
-import { t } from '@/locales';
-
-import { FORM_RULES, INITIAL_DATA, PARTY_A_OPTIONS, PARTY_B_OPTIONS, TYPE_OPTIONS } from './constants';
-
-defineOptions({
-  name: 'FormBase',
-});
-
-const formData = ref({ ...INITIAL_DATA });
-
-const onReset = () => {
-  MessagePlugin.warning('取消新建');
-};
-const onSubmit = (ctx: SubmitContext) => {
-  if (ctx.validateResult === true) {
-    MessagePlugin.success('新建成功');
-  }
-};
-const beforeUpload = (file: UploadFile) => {
-  if (!/\.pdf$/.test(file.name)) {
-    MessagePlugin.warning('请上传pdf文件');
-    return false;
-  }
-  if (file.size > 60 * 1024 * 1024) {
-    MessagePlugin.warning('上传文件不能大于60M');
-    return false;
-  }
-  return true;
-};
-const handleFail = (options: UploadFailContext) => {
-  MessagePlugin.error(`文件 ${options.file.name} 上传失败`);
-};
-// 用于格式化接口响应值，error 会被用于上传失败的提示文字；url 表示文件/图片地址
-const formatResponse = (res: any) => {
-  return { ...res, error: '上传失败，请重试', url: res.url };
-};
-</script>
 <style lang="less" scoped>
 @import './index.less';
 </style>

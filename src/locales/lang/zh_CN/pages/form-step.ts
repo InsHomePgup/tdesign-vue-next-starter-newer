@@ -51,4 +51,4 @@ export default {
   },
   preStep: '上一步',
   nextStep: '下一步',
-};
+}

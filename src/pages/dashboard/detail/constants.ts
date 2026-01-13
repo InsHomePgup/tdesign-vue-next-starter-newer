@@ -1,4 +1,4 @@
-import { t } from '@/locales';
+import { t } from '@/locales'
 
 export const PANE_LIST_DATA = [
   {
@@ -32,7 +32,7 @@ export const PANE_LIST_DATA = [
     number: 78,
     upTrend: '16%',
   },
-];
+]
 
 export const PRODUCT_LIST = [
   {
@@ -49,4 +49,4 @@ export const PRODUCT_LIST = [
     name: t('pages.dashboardDetail.ssl'),
     type: 4,
   },
-];
+]

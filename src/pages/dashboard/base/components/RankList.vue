@@ -1,66 +1,10 @@
-<template>
-  <t-row :gutter="16" class="row-container">
-    <t-col :xs="12" :xl="6">
-      <t-card :title="t('pages.dashboardBase.rankList.title')" class="dashboard-rank-card" :bordered="false">
-        <template #actions>
-          <t-radio-group default-value="dateVal" variant="default-filled">
-            <t-radio-button value="dateVal">{{ t('pages.dashboardBase.rankList.week') }}</t-radio-button>
-            <t-radio-button value="monthVal">{{ t('pages.dashboardBase.rankList.month') }}</t-radio-button>
-          </t-radio-group>
-        </template>
-        <t-table :data="SALE_TEND_LIST" :columns="SALE_COLUMNS" row-key="productName">
-          <template #index="{ rowIndex }">
-            <span :class="getRankClass(rowIndex)">
-              {{ rowIndex + 1 }}
-            </span>
-          </template>
-          <template #growUp="{ row }">
-            <span>
-              <trend :type="row.growUp > 0 ? 'up' : 'down'" :describe="Math.abs(row.growUp)" />
-            </span>
-          </template>
-          <template #operation="slotProps">
-            <t-link theme="primary" @click="rehandleClickOp(slotProps)">{{
-              t('pages.dashboardBase.rankList.info')
-            }}</t-link>
-          </template>
-        </t-table>
-      </t-card>
-    </t-col>
-    <t-col :xs="12" :xl="6">
-      <t-card :title="t('pages.dashboardBase.rankList.title')" class="dashboard-rank-card" :bordered="false">
-        <template #actions>
-          <t-radio-group default-value="dateVal" variant="default-filled">
-            <t-radio-button value="dateVal">{{ t('pages.dashboardBase.rankList.week') }}</t-radio-button>
-            <t-radio-button value="monthVal">{{ t('pages.dashboardBase.rankList.month') }}</t-radio-button>
-          </t-radio-group>
-        </template>
-        <t-table :data="BUY_TEND_LIST" :columns="BUY_COLUMNS" row-key="productName">
-          <template #index="{ rowIndex }">
-            <span :class="getRankClass(rowIndex)">
-              {{ rowIndex + 1 }}
-            </span>
-          </template>
-          <template #growUp="{ row }">
-            <trend :type="row.growUp > 0 ? 'up' : 'down'" :describe="Math.abs(row.growUp)" />
-          </template>
-          <template #operation="slotProps">
-            <t-link theme="primary" @click="rehandleClickOp(slotProps)">{{
-              t('pages.dashboardBase.rankList.info')
-            }}</t-link>
-          </template>
-        </t-table>
-      </t-card>
-    </t-col>
-  </t-row>
-</template>
 <script setup lang="ts">
-import type { TdBaseTableProps } from 'tdesign-vue-next';
+import type { TdBaseTableProps } from 'tdesign-vue-next'
 
-import Trend from '@/components/trend/index.vue';
-import { t } from '@/locales';
+import Trend from '@/components/trend/index.vue'
+import { t } from '@/locales'
 
-import { BUY_TEND_LIST, SALE_TEND_LIST } from '../constants';
+import { BUY_TEND_LIST, SALE_TEND_LIST } from '../constants'
 
 const SALE_COLUMNS: TdBaseTableProps['columns'] = [
   {
@@ -96,7 +40,7 @@ const SALE_COLUMNS: TdBaseTableProps['columns'] = [
     width: 70,
     fixed: 'right',
   },
-];
+]
 
 const BUY_COLUMNS: TdBaseTableProps['columns'] = [
   {
@@ -132,15 +76,81 @@ const BUY_COLUMNS: TdBaseTableProps['columns'] = [
     width: 70,
     fixed: 'right',
   },
-];
+]
 
 const rehandleClickOp = (val: MouseEvent) => {
-  console.log(val);
-};
+  console.log(val)
+}
 const getRankClass = (index: number) => {
-  return ['dashboard-rank', { 'dashboard-rank__top': index < 3 }];
-};
+  return ['dashboard-rank', { 'dashboard-rank__top': index < 3 }]
+}
 </script>
+
+<template>
+  <t-row :gutter="16" class="row-container">
+    <t-col :xs="12" :xl="6">
+      <t-card :title="t('pages.dashboardBase.rankList.title')" class="dashboard-rank-card" :bordered="false">
+        <template #actions>
+          <t-radio-group default-value="dateVal" variant="default-filled">
+            <t-radio-button value="dateVal">
+              {{ t('pages.dashboardBase.rankList.week') }}
+            </t-radio-button>
+            <t-radio-button value="monthVal">
+              {{ t('pages.dashboardBase.rankList.month') }}
+            </t-radio-button>
+          </t-radio-group>
+        </template>
+        <t-table :data="SALE_TEND_LIST" :columns="SALE_COLUMNS" row-key="productName">
+          <template #index="{ rowIndex }">
+            <span :class="getRankClass(rowIndex)">
+              {{ rowIndex + 1 }}
+            </span>
+          </template>
+          <template #growUp="{ row }">
+            <span>
+              <Trend :type="row.growUp > 0 ? 'up' : 'down'" :describe="Math.abs(row.growUp)" />
+            </span>
+          </template>
+          <template #operation="slotProps">
+            <t-link theme="primary" @click="rehandleClickOp(slotProps)">
+              {{ t('pages.dashboardBase.rankList.info') }}
+            </t-link>
+          </template>
+        </t-table>
+      </t-card>
+    </t-col>
+    <t-col :xs="12" :xl="6">
+      <t-card :title="t('pages.dashboardBase.rankList.title')" class="dashboard-rank-card" :bordered="false">
+        <template #actions>
+          <t-radio-group default-value="dateVal" variant="default-filled">
+            <t-radio-button value="dateVal">
+              {{ t('pages.dashboardBase.rankList.week') }}
+            </t-radio-button>
+            <t-radio-button value="monthVal">
+              {{ t('pages.dashboardBase.rankList.month') }}
+            </t-radio-button>
+          </t-radio-group>
+        </template>
+        <t-table :data="BUY_TEND_LIST" :columns="BUY_COLUMNS" row-key="productName">
+          <template #index="{ rowIndex }">
+            <span :class="getRankClass(rowIndex)">
+              {{ rowIndex + 1 }}
+            </span>
+          </template>
+          <template #growUp="{ row }">
+            <Trend :type="row.growUp > 0 ? 'up' : 'down'" :describe="Math.abs(row.growUp)" />
+          </template>
+          <template #operation="slotProps">
+            <t-link theme="primary" @click="rehandleClickOp(slotProps)">
+              {{ t('pages.dashboardBase.rankList.info') }}
+            </t-link>
+          </template>
+        </t-table>
+      </t-card>
+    </t-col>
+  </t-row>
+</template>
+
 <style lang="less" scoped>
 .dashboard-rank-card {
   padding: var(--td-comp-paddingTB-xxl) var(--td-comp-paddingLR-xxl);

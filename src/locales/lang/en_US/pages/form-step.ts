@@ -50,4 +50,4 @@ export default {
   },
   preStep: 'pre step',
   nextStep: 'next step',
-};
+}

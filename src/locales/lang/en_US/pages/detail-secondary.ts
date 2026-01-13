@@ -6,4 +6,4 @@ export default {
   setUnread: 'set as unread',
   delete: 'delete',
   empty: 'Empty',
-};
+}

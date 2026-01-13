@@ -42,4 +42,4 @@ export default {
     thisMonth: 'this month',
     lastMonth: 'last month',
   },
-};
+}

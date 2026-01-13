@@ -1,3 +1,74 @@
+<script setup lang="ts">
+import type { FormInstanceFunctions, FormRule, SubmitContext } from 'tdesign-vue-next'
+import { MessagePlugin } from 'tdesign-vue-next'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+import { useCounter } from '@/hooks'
+import { t } from '@/locales'
+import { useUserStore } from '@/store'
+
+const userStore = useUserStore()
+
+const INITIAL_DATA = {
+  phone: '',
+  account: 'admin',
+  password: 'admin',
+  verifyCode: '',
+  checked: false,
+}
+
+const FORM_RULES: Record<string, FormRule[]> = {
+  phone: [{ required: true, message: t('pages.login.required.phone'), type: 'error' }],
+  account: [{ required: true, message: t('pages.login.required.account'), type: 'error' }],
+  password: [{ required: true, message: t('pages.login.required.password'), type: 'error' }],
+  verifyCode: [{ required: true, message: t('pages.login.required.verification'), type: 'error' }],
+}
+
+const type = ref('password')
+
+const form = ref<FormInstanceFunctions>()
+const formData = ref({ ...INITIAL_DATA })
+const showPsw = ref(false)
+
+const [countDown, handleCounter] = useCounter()
+
+const switchType = (val: string) => {
+  type.value = val
+}
+
+const router = useRouter()
+const route = useRoute()
+
+/**
+ * 发送验证码
+ */
+const sendCode = () => {
+  form.value.validate({ fields: ['phone'] }).then((e) => {
+    if (e === true) {
+      handleCounter()
+    }
+  })
+}
+
+const onSubmit = async (ctx: SubmitContext) => {
+  if (ctx.validateResult === true) {
+    try {
+      await userStore.login(formData.value)
+
+      MessagePlugin.success(t('pages.login.loginSuccess'))
+      const redirect = route.query.redirect as string
+      const redirectUrl = redirect ? decodeURIComponent(redirect) : '/dashboard'
+      router.push(redirectUrl)
+    }
+    catch (e) {
+      console.log(e)
+      MessagePlugin.error(e.message)
+    }
+  }
+}
+</script>
+
 <template>
   <t-form
     ref="form"
@@ -68,7 +139,9 @@
     </template>
 
     <t-form-item v-if="type !== 'qrcode'" class="btn-container">
-      <t-button block size="large" type="submit"> {{ t('pages.login.signIn') }} </t-button>
+      <t-button block size="large" type="submit">
+        {{ t('pages.login.signIn') }}
+      </t-button>
     </t-form-item>
 
     <div class="switch-container">
@@ -80,75 +153,7 @@
     </div>
   </t-form>
 </template>
-<script setup lang="ts">
-import type { FormInstanceFunctions, FormRule, SubmitContext } from 'tdesign-vue-next';
-import { MessagePlugin } from 'tdesign-vue-next';
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
-import { useCounter } from '@/hooks';
-import { t } from '@/locales';
-import { useUserStore } from '@/store';
-
-const userStore = useUserStore();
-
-const INITIAL_DATA = {
-  phone: '',
-  account: 'admin',
-  password: 'admin',
-  verifyCode: '',
-  checked: false,
-};
-
-const FORM_RULES: Record<string, FormRule[]> = {
-  phone: [{ required: true, message: t('pages.login.required.phone'), type: 'error' }],
-  account: [{ required: true, message: t('pages.login.required.account'), type: 'error' }],
-  password: [{ required: true, message: t('pages.login.required.password'), type: 'error' }],
-  verifyCode: [{ required: true, message: t('pages.login.required.verification'), type: 'error' }],
-};
-
-const type = ref('password');
-
-const form = ref<FormInstanceFunctions>();
-const formData = ref({ ...INITIAL_DATA });
-const showPsw = ref(false);
-
-const [countDown, handleCounter] = useCounter();
-
-const switchType = (val: string) => {
-  type.value = val;
-};
-
-const router = useRouter();
-const route = useRoute();
-
-/**
- * 发送验证码
- */
-const sendCode = () => {
-  form.value.validate({ fields: ['phone'] }).then((e) => {
-    if (e === true) {
-      handleCounter();
-    }
-  });
-};
-
-const onSubmit = async (ctx: SubmitContext) => {
-  if (ctx.validateResult === true) {
-    try {
-      await userStore.login(formData.value);
-
-      MessagePlugin.success(t('pages.login.loginSuccess'));
-      const redirect = route.query.redirect as string;
-      const redirectUrl = redirect ? decodeURIComponent(redirect) : '/dashboard';
-      router.push(redirectUrl);
-    } catch (e) {
-      console.log(e);
-      MessagePlugin.error(e.message);
-    }
-  }
-};
-</script>
 <style lang="less" scoped>
 @import '../index.less';
 </style>

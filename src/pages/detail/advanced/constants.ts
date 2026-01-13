@@ -1,4 +1,4 @@
-import { t } from '@/locales';
+import { t } from '@/locales'
 
 export const BASE_INFO_DATA = [
   {
@@ -77,7 +77,7 @@ export const BASE_INFO_DATA = [
     value: '2020-12-22 10:00:00',
     type: null,
   },
-];
+]
 
 export const PRODUCT_LIST = [
   {
@@ -100,4 +100,4 @@ export const PRODUCT_LIST = [
     use: 120,
     stock: 2000,
   },
-];
+]

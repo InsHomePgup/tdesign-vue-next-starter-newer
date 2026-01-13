@@ -27,4 +27,4 @@ export default {
       customSyntax: 'postcss-less',
     },
   ],
-};
+}

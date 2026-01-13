@@ -1,12 +1,12 @@
-import { defineStore } from 'pinia';
+import type { UserInfo } from '@/types/interface'
 
-import { usePermissionStore } from '@/store';
-import type { UserInfo } from '@/types/interface';
+import { defineStore } from 'pinia'
+import { usePermissionStore } from '@/store'
 
 const InitUserInfo: UserInfo = {
   name: '', // 用户名，用于展示在页面右上角头像处
   roles: [], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
-};
+}
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -15,14 +15,14 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     roles: (state) => {
-      return state.userInfo?.roles;
+      return state.userInfo?.roles
     },
   },
   actions: {
     async login(userInfo: Record<string, unknown>) {
       const mockLogin = async (userInfo: Record<string, unknown>) => {
         // 登录请求流程
-        console.log(`用户信息:`, userInfo);
+        console.log(`用户信息:`, userInfo)
         // const { account, password } = userInfo;
         // if (account !== 'td') {
         //   return {
@@ -44,14 +44,15 @@ export const useUserStore = defineStore('user', {
           code: 200,
           message: '登录成功',
           data: 'main_token',
-        };
-      };
+        }
+      }
 
-      const res = await mockLogin(userInfo);
+      const res = await mockLogin(userInfo)
       if (res.code === 200) {
-        this.token = res.data;
-      } else {
-        throw res;
+        this.token = res.data
+      }
+      else {
+        throw res
       }
     },
     async getUserInfo() {
@@ -60,28 +61,28 @@ export const useUserStore = defineStore('user', {
           return {
             name: 'Tencent',
             roles: ['all'], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
-          };
+          }
         }
         return {
           name: 'td_dev',
           roles: ['UserIndex', 'DashboardBase', 'login'], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
-        };
-      };
-      const res = await mockRemoteUserInfo(this.token);
+        }
+      }
+      const res = await mockRemoteUserInfo(this.token)
 
-      this.userInfo = res;
+      this.userInfo = res
     },
     async logout() {
-      this.token = '';
-      this.userInfo = { ...InitUserInfo };
+      this.token = ''
+      this.userInfo = { ...InitUserInfo }
     },
   },
   persist: {
     afterRestore: () => {
-      const permissionStore = usePermissionStore();
-      permissionStore.initRoutes();
+      const permissionStore = usePermissionStore()
+      permissionStore.initRoutes()
     },
     key: 'user',
     paths: ['token'],
   },
-});
+})

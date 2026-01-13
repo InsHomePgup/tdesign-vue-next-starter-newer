@@ -1,4 +1,4 @@
-import type { FormRule, UploadFile } from 'tdesign-vue-next';
+import type { FormRule, UploadFile } from 'tdesign-vue-next'
 
 export const FORM_RULES: Record<string, FormRule[]> = {
   name: [{ required: true, message: '请输入合同名称', type: 'error' }],
@@ -10,7 +10,7 @@ export const FORM_RULES: Record<string, FormRule[]> = {
   signDate: [{ required: true, message: '请选择日期', type: 'error' }],
   startDate: [{ required: true, message: '请选择日期', type: 'error' }],
   endDate: [{ required: true, message: '请选择日期', type: 'error' }],
-};
+}
 
 export const INITIAL_DATA = {
   name: '',
@@ -24,22 +24,22 @@ export const INITIAL_DATA = {
   amount: 0,
   comment: '',
   files: [] as Array<UploadFile>,
-};
+}
 
 export const TYPE_OPTIONS = [
   { label: 'Type A', value: '1' },
   { label: 'Type B', value: '2' },
   { label: 'Type C', value: '3' },
-];
+]
 
 export const PARTY_A_OPTIONS = [
   { label: 'Company A', value: '1' },
   { label: 'Company B', value: '2' },
   { label: 'Company C', value: '3' },
-];
+]
 
 export const PARTY_B_OPTIONS = [
   { label: 'Company A', value: '1' },
   { label: 'Company B', value: '2' },
   { label: 'Company C', value: '3' },
-];
+]

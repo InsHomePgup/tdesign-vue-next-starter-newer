@@ -1,38 +1,40 @@
+<script setup lang="ts">
+import Result from '@/components/result/index.vue'
+import Thumbnail from '@/components/thumbnail/index.vue'
+import { t } from '@/locales'
+
+defineOptions({
+  name: 'ResultBrowserIncompatible',
+})
+</script>
+
 <template>
-  <result
+  <Result
     :title="t('pages.result.browserIncompatible.title')"
     type="ie"
     :tip="t('pages.result.browserIncompatible.subtitle')"
   >
     <div class="result-slot-container">
-      <t-button class="result-button" @click="() => $router.push('/')">{{
-        t('pages.result.browserIncompatible.back')
-      }}</t-button>
+      <t-button class="result-button" @click="() => $router.push('/')">
+        {{ t('pages.result.browserIncompatible.back') }}
+      </t-button>
       <div class="recommend-container">
         <div>{{ t('pages.result.browserIncompatible.recommend') }}</div>
         <div class="recommend-browser">
           <div>
-            <thumbnail class="browser-icon" url="https://tdesign.gtimg.com/starter/result-page/chorme.png" />
+            <Thumbnail class="browser-icon" url="https://tdesign.gtimg.com/starter/result-page/chorme.png" />
             <div>Chrome</div>
           </div>
           <div>
-            <thumbnail class="browser-icon" url="https://tdesign.gtimg.com/starter/result-page/qq-browser.png" />
+            <Thumbnail class="browser-icon" url="https://tdesign.gtimg.com/starter/result-page/qq-browser.png" />
             <div>QQ Browser</div>
           </div>
         </div>
       </div>
     </div>
-  </result>
+  </Result>
 </template>
-<script setup lang="ts">
-import Result from '@/components/result/index.vue';
-import Thumbnail from '@/components/thumbnail/index.vue';
-import { t } from '@/locales';
 
-defineOptions({
-  name: 'ResultBrowserIncompatible',
-});
-</script>
 <style lang="less" scoped>
 .result-slot-container {
   position: relative;

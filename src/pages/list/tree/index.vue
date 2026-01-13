@@ -1,49 +1,51 @@
+<script setup lang="ts">
+import type { TreeNodeModel } from 'tdesign-vue-next'
+import { SearchIcon } from 'tdesign-icons-vue-next'
+import { ref } from 'vue'
+
+import CommonTable from '@/components/common-table/index.vue'
+import { t } from '@/locales'
+
+import { TREE_DATA } from './constants'
+
+defineOptions({
+  name: 'ListTree',
+})
+
+const filterByText = ref()
+const filterText = ref()
+
+const expanded = ['0', '0-0', '0-1', '0-2', '0-3', '0-4']
+
+const onInput = () => {
+  if (!filterText.value) {
+    filterByText.value = null
+    return
+  }
+  filterByText.value = (node: TreeNodeModel) => {
+    return node.label.includes(filterText.value)
+  }
+}
+</script>
+
 <template>
   <div class="table-tree-container">
     <div class="list-tree-wrapper">
       <div class="list-tree-operator">
         <t-input v-model="filterText" :placeholder="t('pages.listTree.placeholder')" @change="onInput">
           <template #suffix-icon>
-            <search-icon size="var(--td-comp-size-xxxs)" />
+            <SearchIcon size="var(--td-comp-size-xxxs)" />
           </template>
         </t-input>
         <t-tree :data="TREE_DATA" hover expand-on-click-node :default-expanded="expanded" :filter="filterByText" />
       </div>
       <div class="list-tree-content">
-        <common-table />
+        <CommonTable />
       </div>
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { SearchIcon } from 'tdesign-icons-vue-next';
-import type { TreeNodeModel } from 'tdesign-vue-next';
-import { ref } from 'vue';
 
-import CommonTable from '@/components/common-table/index.vue';
-import { t } from '@/locales';
-
-import { TREE_DATA } from './constants';
-
-defineOptions({
-  name: 'ListTree',
-});
-
-const filterByText = ref();
-const filterText = ref();
-
-const expanded = ['0', '0-0', '0-1', '0-2', '0-3', '0-4'];
-
-const onInput = () => {
-  if (!filterText.value) {
-    filterByText.value = null;
-    return;
-  }
-  filterByText.value = (node: TreeNodeModel) => {
-    return node.label.includes(filterText.value);
-  };
-};
-</script>
 <style lang="less" scoped>
 .table-tree-container {
   background-color: var(--td-bg-color-container);

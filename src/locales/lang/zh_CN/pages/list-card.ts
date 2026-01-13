@@ -10,4 +10,4 @@ export default {
     off: '停用',
     on: '启用',
   },
-};
+}

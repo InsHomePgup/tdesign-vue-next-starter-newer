@@ -25,4 +25,4 @@ export default {
     verification: '验证码必填',
   },
   sendVerification: '发送验证码',
-};
+}

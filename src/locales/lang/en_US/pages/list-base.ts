@@ -22,4 +22,4 @@ export default {
     pending: 'pending',
     finish: 'finish',
   },
-};
+}

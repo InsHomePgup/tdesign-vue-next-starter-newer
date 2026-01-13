@@ -40,4 +40,4 @@ export default {
     back: 'Back to homepage',
     reload: 'Reload',
   },
-};
+}

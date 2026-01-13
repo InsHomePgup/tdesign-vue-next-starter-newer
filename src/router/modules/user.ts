@@ -1,8 +1,8 @@
-import { LogoutIcon } from 'tdesign-icons-vue-next';
-import { shallowRef } from 'vue';
-import type { RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router'
+import { LogoutIcon } from 'tdesign-icons-vue-next'
+import { shallowRef } from 'vue'
 
-import Layout from '@/layouts/index.vue';
+import Layout from '@/layouts/index.vue'
 
 export default [
   {
@@ -34,4 +34,4 @@ export default [
       },
     ],
   },
-] satisfies RouteRecordRaw[];
+] satisfies RouteRecordRaw[]

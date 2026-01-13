@@ -24,4 +24,4 @@ export default {
   notaryPublic: 'Notary Public',
   confirm: 'confirm',
   cancel: 'cancel',
-};
+}

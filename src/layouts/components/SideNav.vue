@@ -1,43 +1,19 @@
-<template>
-  <div :class="sideNavCls">
-    <t-menu
-      :class="menuCls"
-      :theme="theme"
-      :value="active"
-      :collapsed="collapsed"
-      :expanded="expanded"
-      :expand-mutex="menuAutoCollapsed"
-      @expand="onExpanded"
-    >
-      <template #logo>
-        <span v-if="showLogo" :class="`${prefix}-side-nav-logo-wrapper`" @click="goHome">
-          <component :is="getLogo()" :class="logoCls" />
-        </span>
-      </template>
-      <menu-content :nav-data="menu" />
-      <template #operations>
-        <span :class="versionCls"> {{ !collapsed ? 'TDesign Starter' : '' }} {{ pgk.version }} </span>
-      </template>
-    </t-menu>
-    <div :class="`${prefix}-side-nav-placeholder${collapsed ? '-hidden' : ''}`"></div>
-  </div>
-</template>
 <script setup lang="ts">
-import { difference, remove, union } from 'lodash';
-import type { MenuValue } from 'tdesign-vue-next';
-import type { PropType } from 'vue';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import type { MenuValue } from 'tdesign-vue-next'
+import type { PropType } from 'vue'
+import type { MenuRoute, ModeType } from '@/types/interface'
+import { difference, remove, union } from 'lodash'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
-import AssetLogoFull from '@/assets/assets-logo-full.svg?component';
-import AssetLogo from '@/assets/assets-t-logo.svg?component';
-import { prefix } from '@/config/global';
-import { getActive } from '@/router';
-import { useSettingStore } from '@/store';
-import type { MenuRoute, ModeType } from '@/types/interface';
+import { useRouter } from 'vue-router'
+import AssetLogoFull from '@/assets/assets-logo-full.svg?component'
+import AssetLogo from '@/assets/assets-t-logo.svg?component'
+import { prefix } from '@/config/global'
+import { getActive } from '@/router'
+import { useSettingStore } from '@/store'
 
-import pgk from '../../../package.json';
-import MenuContent from './MenuContent.vue';
+import pgk from '../../../package.json'
+import MenuContent from './MenuContent.vue'
 
 const { menu, showLogo, isFixed, layout, theme, isCompact } = defineProps({
   menu: {
@@ -68,66 +44,66 @@ const { menu, showLogo, isFixed, layout, theme, isCompact } = defineProps({
     type: Boolean as PropType<boolean>,
     default: false,
   },
-});
+})
 
-const MIN_POINT = 992 - 1;
+const MIN_POINT = 992 - 1
 
-const collapsed = computed(() => useSettingStore().isSidebarCompact);
-const menuAutoCollapsed = computed(() => useSettingStore().menuAutoCollapsed);
+const collapsed = computed(() => useSettingStore().isSidebarCompact)
+const menuAutoCollapsed = computed(() => useSettingStore().menuAutoCollapsed)
 
-const active = computed(() => getActive());
+const active = computed(() => getActive())
 
-const expanded = ref<MenuValue[]>([]);
+const expanded = ref<MenuValue[]>([])
 
 const getExpanded = () => {
-  const path = getActive();
-  const parts = path.split('/').slice(1);
-  const result = parts.map((_, index) => `/${parts.slice(0, index + 1).join('/')}`);
+  const path = getActive()
+  const parts = path.split('/').slice(1)
+  const result = parts.map((_, index) => `/${parts.slice(0, index + 1).join('/')}`)
 
-  expanded.value = menuAutoCollapsed.value ? result : union(result, expanded.value);
-};
+  expanded.value = menuAutoCollapsed.value ? result : union(result, expanded.value)
+}
 
 watch(
   () => active.value,
   () => {
-    getExpanded();
+    getExpanded()
   },
-);
+)
 
 const onExpanded = (value: MenuValue[]) => {
-  const currentOperationMenu = difference(expanded.value, value);
-  const allExpanded = union(value, expanded.value);
-  remove(allExpanded, (item) => currentOperationMenu.includes(item));
-  expanded.value = allExpanded;
-};
+  const currentOperationMenu = difference(expanded.value, value)
+  const allExpanded = union(value, expanded.value)
+  remove(allExpanded, item => currentOperationMenu.includes(item))
+  expanded.value = allExpanded
+}
 
 const sideMode = computed(() => {
-  return theme === 'dark';
-});
+  return theme === 'dark'
+})
 const sideNavCls = computed(() => {
   return [
     `${prefix}-sidebar-layout`,
     {
       [`${prefix}-sidebar-compact`]: isCompact,
     },
-  ];
-});
+  ]
+})
 const logoCls = computed(() => {
   return [
     `${prefix}-side-nav-logo-${collapsed.value ? 't' : 'tdesign'}-logo`,
     {
       [`${prefix}-side-nav-dark`]: sideMode.value,
     },
-  ];
-});
+  ]
+})
 const versionCls = computed(() => {
   return [
     `version-container`,
     {
       [`${prefix}-side-nav-dark`]: sideMode.value,
     },
-  ];
-});
+  ]
+})
 const menuCls = computed(() => {
   return [
     `${prefix}-side-nav`,
@@ -136,37 +112,63 @@ const menuCls = computed(() => {
       [`${prefix}-side-nav-no-fixed`]: !isFixed,
       [`${prefix}-side-nav-mix-fixed`]: layout === 'mix' && isFixed,
     },
-  ];
-});
+  ]
+})
 
-const router = useRouter();
-const settingStore = useSettingStore();
+const router = useRouter()
+const settingStore = useSettingStore()
 
 const autoCollapsed = () => {
-  const isCompact = window.innerWidth <= MIN_POINT;
+  const isCompact = window.innerWidth <= MIN_POINT
   settingStore.updateConfig({
     isSidebarCompact: isCompact,
-  });
-};
+  })
+}
 
 onMounted(() => {
-  getExpanded();
-  autoCollapsed();
+  getExpanded()
+  autoCollapsed()
 
-  window.addEventListener('resize', autoCollapsed);
-});
+  window.addEventListener('resize', autoCollapsed)
+})
 
 onUnmounted(() => {
-  window.removeEventListener('resize', autoCollapsed);
-});
+  window.removeEventListener('resize', autoCollapsed)
+})
 
 const goHome = () => {
-  router.push('/dashboard/base');
-};
+  router.push('/dashboard/base')
+}
 
 const getLogo = () => {
-  if (collapsed.value) return AssetLogo;
-  return AssetLogoFull;
-};
+  if (collapsed.value) return AssetLogo
+  return AssetLogoFull
+}
 </script>
+
+<template>
+  <div :class="sideNavCls">
+    <t-menu
+      :class="menuCls"
+      :theme="theme"
+      :value="active"
+      :collapsed="collapsed"
+      :expanded="expanded"
+      :expand-mutex="menuAutoCollapsed"
+      @expand="onExpanded"
+    >
+      <template #logo>
+        <span v-if="showLogo" :class="`${prefix}-side-nav-logo-wrapper`" @click="goHome">
+          <component :is="getLogo()" :class="logoCls" />
+        </span>
+      </template>
+      <MenuContent :nav-data="menu" />
+      <template #operations>
+        <span :class="versionCls"> {{ !collapsed ? 'TDesign Starter' : '' }} {{ pgk.version }} </span>
+      </template>
+    </t-menu>
+    <div :class="`${prefix}-side-nav-placeholder${collapsed ? '-hidden' : ''}`" />
+  </div>
+</template>
+
 <style lang="less" scoped></style>

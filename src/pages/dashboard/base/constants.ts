@@ -1,8 +1,8 @@
 interface TendItem {
-  growUp?: number;
-  productName: string;
-  count: number;
-  date: string;
+  growUp?: number
+  productName: string
+  count: number
+  date: string
 }
 
 export const SALE_TEND_LIST: Array<TendItem> = [
@@ -42,7 +42,7 @@ export const SALE_TEND_LIST: Array<TendItem> = [
     count: 2015,
     date: '2021-09-12',
   },
-];
+]
 
 export const BUY_TEND_LIST: Array<TendItem> = [
   {
@@ -81,4 +81,4 @@ export const BUY_TEND_LIST: Array<TendItem> = [
     count: 2015,
     date: '2021-09-12',
   },
-];
+]

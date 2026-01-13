@@ -34,4 +34,4 @@ export default {
     reset: 'reset',
     query: 'query',
   },
-};
+}

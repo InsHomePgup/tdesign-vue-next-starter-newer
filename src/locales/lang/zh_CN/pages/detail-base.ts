@@ -17,4 +17,4 @@ export default {
       desc: '管理员-李川操作',
     },
   },
-};
+}

@@ -22,4 +22,4 @@ export default {
     pending: '待履行',
     finish: '已完成',
   },
-};
+}

@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const { type, isReverseColor } = defineProps({
+  type: {
+    type: String,
+    default: '',
+  },
+  describe: {
+    type: [String, Number],
+    default: undefined,
+  },
+  isReverseColor: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+const containerCls = computed(() => {
+  return [
+    'trend-container',
+    {
+      'trend-container__reverse': isReverseColor,
+      'trend-container__up': !isReverseColor && type === 'up',
+      'trend-container__down': !isReverseColor && type === 'down',
+    },
+  ]
+})
+
+const iconCls = computed(() => ['trend-icon-container'])
+</script>
+
 <template>
   <span :class="containerCls">
     <span :class="iconCls">
@@ -20,37 +52,7 @@
     <span>{{ describe }}</span>
   </span>
 </template>
-<script setup lang="ts">
-import { computed } from 'vue';
 
-const { type, isReverseColor } = defineProps({
-  type: {
-    type: String,
-    default: '',
-  },
-  describe: {
-    type: [String, Number],
-    default: undefined,
-  },
-  isReverseColor: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const containerCls = computed(() => {
-  return [
-    'trend-container',
-    {
-      'trend-container__reverse': isReverseColor,
-      'trend-container__up': !isReverseColor && type === 'up',
-      'trend-container__down': !isReverseColor && type === 'down',
-    },
-  ];
-});
-
-const iconCls = computed(() => ['trend-icon-container']);
-</script>
 <style lang="less" scoped>
 .trend {
   &-container {

@@ -19,4 +19,4 @@ export default {
   contentList: '内容列表',
   teamMember: '团队成员',
   serviceProduction: '服务产品',
-};
+}

@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import type { SubmitContext } from 'tdesign-vue-next'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { t } from '@/locales'
+
+import {
+  ADDRESS_OPTIONS,
+  FORM_RULES,
+  INITIAL_DATA1,
+  INITIAL_DATA2,
+  INITIAL_DATA3,
+  NAME_OPTIONS,
+  TYPE_OPTIONS,
+} from './constants'
+
+defineOptions({
+  name: 'FormStep',
+})
+
+const formData1 = ref({ ...INITIAL_DATA1 })
+const formData2 = ref({ ...INITIAL_DATA2 })
+const formData3 = ref({ ...INITIAL_DATA3 })
+const activeForm = ref(0)
+
+const amount = computed(() => {
+  if (formData1.value.name === '1') {
+    return '565421'
+  }
+  if (formData1.value.name === '2') {
+    return '278821'
+  }
+  if (formData1.value.name === '3') {
+    return '109824'
+  }
+  return '--'
+})
+
+const onSubmit = (result: SubmitContext, val: number) => {
+  if (result.validateResult === true) {
+    activeForm.value = val
+  }
+}
+const onReset = (val: number) => {
+  activeForm.value = val
+}
+const complete = () => {
+  const router = useRouter()
+  router.replace({ path: '/detail/advanced' })
+}
+</script>
+
 <template>
   <div>
     <div class="form-step-container">
@@ -45,9 +98,13 @@
             </t-option>
           </t-select>
         </t-form-item>
-        <t-form-item :label="t('pages.formStep.step1.amount')"> ¥ {{ amount }} </t-form-item>
+        <t-form-item :label="t('pages.formStep.step1.amount')">
+          ¥ {{ amount }}
+        </t-form-item>
         <t-form-item>
-          <t-button theme="primary" type="submit"> {{ t('pages.formStep.step1.submit') }} </t-button>
+          <t-button theme="primary" type="submit">
+            {{ t('pages.formStep.step1.submit') }}
+          </t-button>
         </t-form-item>
       </t-form>
 
@@ -111,8 +168,12 @@
           />
         </t-form-item>
         <t-form-item>
-          <t-button type="reset" theme="default" variant="base"> {{ t('pages.formStep.preStep') }} </t-button>
-          <t-button theme="primary" type="submit"> {{ t('pages.formStep.nextStep') }} </t-button>
+          <t-button type="reset" theme="default" variant="base">
+            {{ t('pages.formStep.preStep') }}
+          </t-button>
+          <t-button theme="primary" type="submit">
+            {{ t('pages.formStep.nextStep') }}
+          </t-button>
         </t-form-item>
       </t-form>
 
@@ -143,8 +204,12 @@
           <t-textarea v-model="formData3.fullAddress" :style="{ width: '480px' }" />
         </t-form-item>
         <t-form-item>
-          <t-button type="reset" theme="default" variant="base"> {{ t('pages.formStep.preStep') }} </t-button>
-          <t-button theme="primary" type="submit"> {{ t('pages.formStep.nextStep') }} </t-button>
+          <t-button type="reset" theme="default" variant="base">
+            {{ t('pages.formStep.preStep') }}
+          </t-button>
+          <t-button theme="primary" type="submit">
+            {{ t('pages.formStep.nextStep') }}
+          </t-button>
         </t-form-item>
       </t-form>
 
@@ -152,10 +217,16 @@
       <div v-show="activeForm === 6" class="step-form-4">
         <t-space direction="vertical" style="align-items: center">
           <t-icon name="check-circle-filled" style="color: green" size="52px" />
-          <p class="text">{{ t('pages.formStep.step4.finishTitle') }}</p>
-          <p class="tips">{{ t('pages.formStep.step4.finishTips') }}</p>
+          <p class="text">
+            {{ t('pages.formStep.step4.finishTitle') }}
+          </p>
+          <p class="tips">
+            {{ t('pages.formStep.step4.finishTips') }}
+          </p>
           <div class="button-group">
-            <t-button theme="primary" @click="onReset(0)"> {{ t('pages.formStep.step4.reapply') }} </t-button>
+            <t-button theme="primary" @click="onReset(0)">
+              {{ t('pages.formStep.step4.reapply') }}
+            </t-button>
             <t-button variant="base" theme="default" @click="complete">
               {{ t('pages.formStep.step4.check') }}
             </t-button>
@@ -165,58 +236,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import type { SubmitContext } from 'tdesign-vue-next';
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
-import { t } from '@/locales';
-
-import {
-  ADDRESS_OPTIONS,
-  FORM_RULES,
-  INITIAL_DATA1,
-  INITIAL_DATA2,
-  INITIAL_DATA3,
-  NAME_OPTIONS,
-  TYPE_OPTIONS,
-} from './constants';
-
-defineOptions({
-  name: 'FormStep',
-});
-
-const formData1 = ref({ ...INITIAL_DATA1 });
-const formData2 = ref({ ...INITIAL_DATA2 });
-const formData3 = ref({ ...INITIAL_DATA3 });
-const activeForm = ref(0);
-
-const amount = computed(() => {
-  if (formData1.value.name === '1') {
-    return '565421';
-  }
-  if (formData1.value.name === '2') {
-    return '278821';
-  }
-  if (formData1.value.name === '3') {
-    return '109824';
-  }
-  return '--';
-});
-
-const onSubmit = (result: SubmitContext, val: number) => {
-  if (result.validateResult === true) {
-    activeForm.value = val;
-  }
-};
-const onReset = (val: number) => {
-  activeForm.value = val;
-};
-const complete = () => {
-  const router = useRouter();
-  router.replace({ path: '/detail/advanced' });
-};
-</script>
 <style lang="less" scoped>
 @import './index.less';
 </style>

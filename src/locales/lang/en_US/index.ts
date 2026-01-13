@@ -1,9 +1,9 @@
-import merge from 'lodash/merge';
-import componentsLocale from 'tdesign-vue-next/es/locale/en_US';
+import merge from 'lodash/merge'
+import componentsLocale from 'tdesign-vue-next/es/locale/en_US'
 
-import components from './components';
-import layout from './layout';
-import pages from './pages';
+import components from './components'
+import layout from './layout'
+import pages from './pages'
 
 export default {
   lang: 'English',
@@ -51,4 +51,4 @@ export default {
     //   jumpTo: 'xxx'
     // },
   }),
-};
+}
