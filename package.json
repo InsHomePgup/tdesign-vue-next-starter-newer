@@ -21,7 +21,8 @@
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
-    "test:codegen": "playwright codegen http://localhost:3002"
+    "test:codegen": "playwright codegen http://localhost:3002",
+    "clean": "node scripts/clean-temp.js"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
