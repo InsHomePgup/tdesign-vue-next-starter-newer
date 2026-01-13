@@ -17,8 +17,11 @@
     "stylelint:fix": "stylelint --fix src/**/*.{html,vue,css,sass,less}",
     "prepare": "husky",
     "site:preview": "npm run build && cp -r dist _site",
-    "test": "echo \"no test specified,work in process\"",
-    "test:coverage": "echo \"no test:coverage specified,work in process\""
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen http://localhost:3002"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
@@ -41,6 +44,7 @@
     "@antfu/eslint-config": "^6.7.3",
     "@commitlint/cli": "^20.3.1",
     "@commitlint/config-conventional": "^20.3.1",
+    "@playwright/test": "^1.57.0",
     "@types/lodash": "^4.17.6",
     "@types/mockjs": "^1.0.10",
     "@types/nprogress": "^0.2.3",
