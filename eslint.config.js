@@ -8,6 +8,10 @@ export default antfu(
     yaml: false,
     markdown: false,
     formatters: false,
+    ignores: [
+      '**/playwright-report/**',
+      '**/test-results/**',
+    ],
   },
   {
     rules: {
