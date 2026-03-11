@@ -54,15 +54,15 @@ export const usePermissionStore = defineStore('permission', {
       this.routers = accessedRouters
       this.removeRoutes = removeRoutes
 
-      removeRoutes.forEach((item: RouteRecordRaw) => {
-        if (router.hasRoute(item.name)) {
-          router.removeRoute(item.name)
+      removeRoutes.forEach((item) => {
+        if (router.hasRoute(item.name as any)) {
+          router.removeRoute(item.name as any)
         }
       })
     },
     async restore() {
-      this.removeRoutes.forEach((item: RouteRecordRaw) => {
-        router.addRoute(item)
+      this.removeRoutes.forEach((item) => {
+        router.addRoute(item as RouteRecordRaw)
       })
     },
   },

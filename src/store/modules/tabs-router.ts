@@ -38,14 +38,14 @@ export const useTabsRouterStore = defineStore('tabsRouter', {
     appendTabRouterList(newRoute: TRouterInfo) {
       // 不要将判断条件newRoute.meta.keepAlive !== false修改为newRoute.meta.keepAlive，starter默认开启保活，所以meta.keepAlive未定义时也需要进行保活，只有显式说明false才禁用保活。
       const needAlive = !ignoreCacheRoutes.includes(newRoute.name as string) && newRoute.meta?.keepAlive !== false
-      if (!this.tabRouters.find((route: TRouterInfo) => route.path === newRoute.path)) {
-        this.tabRouterList = this.tabRouterList.concat({ ...newRoute, isAlive: needAlive })
+      if (!this.tabRouters.some((route: TRouterInfo) => route.path === newRoute.path)) {
+        this.tabRouterList = [...this.tabRouterList, ...{ ...newRoute, isAlive: needAlive }]
       }
     },
     // 处理关闭当前
     subtractCurrentTabRouter(newRoute: TRouterInfo) {
       const { routeIdx } = newRoute
-      this.tabRouterList = this.tabRouterList.slice(0, routeIdx).concat(this.tabRouterList.slice(routeIdx + 1))
+      this.tabRouterList = [...this.tabRouterList.slice(0, routeIdx), ...this.tabRouterList.slice(routeIdx + 1)]
     },
     // 处理关闭右侧
     subtractTabRouterBehind(newRoute: TRouterInfo) {
@@ -53,7 +53,7 @@ export const useTabsRouterStore = defineStore('tabsRouter', {
       const homeIdx: number = this.tabRouters.findIndex((route: TRouterInfo) => route.isHome)
       let tabRouterList: Array<TRouterInfo> = this.tabRouterList.slice(0, routeIdx + 1)
       if (routeIdx < homeIdx) {
-        tabRouterList = tabRouterList.concat(homeRoute)
+        tabRouterList = [...tabRouterList, ...homeRoute]
       }
       this.tabRouterList = tabRouterList
     },
@@ -63,7 +63,7 @@ export const useTabsRouterStore = defineStore('tabsRouter', {
       const homeIdx: number = this.tabRouters.findIndex((route: TRouterInfo) => route.isHome)
       let tabRouterList: Array<TRouterInfo> = this.tabRouterList.slice(routeIdx)
       if (routeIdx > homeIdx) {
-        tabRouterList = homeRoute.concat(tabRouterList)
+        tabRouterList = [...homeRoute, ...tabRouterList]
       }
       this.tabRouterList = tabRouterList
     },
@@ -71,7 +71,7 @@ export const useTabsRouterStore = defineStore('tabsRouter', {
     subtractTabRouterOther(newRoute: TRouterInfo) {
       const { routeIdx } = newRoute
       const homeIdx: number = this.tabRouters.findIndex((route: TRouterInfo) => route.isHome)
-      this.tabRouterList = routeIdx === homeIdx ? homeRoute : homeRoute.concat([this.tabRouterList?.[routeIdx]])
+      this.tabRouterList = routeIdx === homeIdx ? homeRoute : [...homeRoute, ...[this.tabRouterList?.[routeIdx]]]
     },
     removeTabRouterList() {
       this.tabRouterList = []

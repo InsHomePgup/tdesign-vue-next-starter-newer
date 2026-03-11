@@ -2,6 +2,9 @@ import isObject from 'lodash/isObject'
 import isString from 'lodash/isString'
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
+const TRAILING_AMPERSAND_REGEX = /&$/
+const TRAILING_QUESTION_REGEX = /\?$/
+const TRAILING_SLASH_REGEX = /\/?$/
 
 export function joinTimestamp<T extends boolean>(_join: boolean, _restful: T): T extends true ? string : object
 
@@ -9,7 +12,7 @@ export function joinTimestamp(join: boolean, restful = false): string | object {
   if (!join) {
     return restful ? '' : {}
   }
-  const now = new Date().getTime()
+  const now = Date.now()
   if (restful) {
     return `?_t=${now}`
   }
@@ -49,6 +52,6 @@ export function setObjToUrlParams(baseUrl: string, obj: { [index: string]: any }
   for (const key in obj) {
     parameters += `${key}=${encodeURIComponent(obj[key])}&`
   }
-  parameters = parameters.replace(/&$/, '')
-  return /\?$/.test(baseUrl) ? baseUrl + parameters : baseUrl.replace(/\/?$/, '?') + parameters
+  parameters = parameters.replace(TRAILING_AMPERSAND_REGEX, '')
+  return TRAILING_QUESTION_REGEX.test(baseUrl) ? baseUrl + parameters : baseUrl.replace(TRAILING_SLASH_REGEX, '?') + parameters
 }

@@ -11,6 +11,8 @@ defineOptions({
   name: 'FormBase',
 })
 
+const PDF_EXTENSION_REGEX = /\.pdf$/
+
 const formData = ref({ ...INITIAL_DATA })
 
 const onReset = () => {
@@ -22,7 +24,7 @@ const onSubmit = (ctx: SubmitContext) => {
   }
 }
 const beforeUpload = (file: UploadFile) => {
-  if (!/\.pdf$/.test(file.name)) {
+  if (!PDF_EXTENSION_REGEX.test(file.name)) {
     MessagePlugin.warning('请上传pdf文件')
     return false
   }

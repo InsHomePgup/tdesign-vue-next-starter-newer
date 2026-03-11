@@ -15,6 +15,8 @@ const { navData } = defineProps({
   },
 })
 
+const URL_PATTERN = /(https?):\/\/([\w.]+)(?:\/\S*)?/
+
 const active = computed(() => getActive())
 
 const { locale } = useLocale()
@@ -60,7 +62,7 @@ const getMenuList = (list: MenuRoute[], basePath?: string): ListItemType[] => {
 const getHref = (item: MenuRoute) => {
   const { frameSrc, frameBlank } = item.meta
   if (frameSrc && frameBlank) {
-    return frameSrc.match(/(https?):\/\/([\w.]+)(?:\/\S*)?/)
+    return frameSrc.match(URL_PATTERN)
   }
   return null
 }

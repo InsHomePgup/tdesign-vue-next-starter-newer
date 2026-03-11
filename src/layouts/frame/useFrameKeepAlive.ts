@@ -1,3 +1,4 @@
+import type { RouteRecordName } from 'vue-router'
 import type { MenuRoute } from '@/types/interface'
 import uniqBy from 'lodash/uniqBy'
 import { computed, toRaw, unref } from 'vue'
@@ -15,10 +16,10 @@ export function useFrameKeepAlive() {
     return ret
   })
 
-  const getOpenTabList = computed((): string[] => {
-    return tabStore.tabRouters.reduce((prev: string[], next) => {
+  const getOpenTabList = computed((): RouteRecordName[] => {
+    return tabStore.tabRouters.reduce((prev: RouteRecordName[], next) => {
       if (next.meta && Reflect.has(next.meta, 'frameSrc')) {
-        prev.push(next.name as string)
+        prev.push(next.name as RouteRecordName)
       }
       return prev
     }, [])
@@ -43,11 +44,11 @@ export function useFrameKeepAlive() {
     return item.name === unref(currentRoute).name
   }
 
-  function hasRenderFrame(name: string) {
+  function hasRenderFrame(name: RouteRecordName) {
     if (!unref(isUseTabsRouter)) {
       return router.currentRoute.value.name === name
     }
-    return unref(getOpenTabList).includes(name)
+    return unref(getOpenTabList).includes(name as any)
   }
 
   return { hasRenderFrame, getFramePages, showIframe, getAllFramePages }

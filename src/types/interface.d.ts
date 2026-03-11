@@ -1,16 +1,16 @@
 import type { TabValue } from 'tdesign-vue-next'
 import type { Component, DefineComponent, FunctionalComponent } from 'vue'
-import type { LocationQueryRaw, RouteMeta, RouteRecordName } from 'vue-router'
+import type { LocationQueryRaw, RouteMeta, RouteRecordName, RouteRecordRedirectOption } from 'vue-router'
 
 export interface MenuRoute {
   // TODO: menuitem 组件实际支持 string 类型但是类型错误，暂时使用 any 类型避免打包错误待组件类型修复
   path: any
   title?: string | Record<string, string>
-  name?: string
+  name?: RouteRecordName
   icon?: string | Component | FunctionalComponent | DefineComponent
-  redirect?: string
-  children: MenuRoute[]
-  meta: RouteMeta
+  redirect?: RouteRecordRedirectOption
+  children?: MenuRoute[]
+  meta?: RouteMeta
 }
 
 export type ModeType = 'dark' | 'light'

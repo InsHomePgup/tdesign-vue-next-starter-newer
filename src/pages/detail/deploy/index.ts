@@ -122,8 +122,8 @@ export function get2ColBarChartDataSet({
   placeholderColor,
   borderColor,
 }: { isMonth?: boolean } & TChartColor) {
-  let lastYearListCopy = lastYearList.concat([])
-  let thisYearListCopy = lastYearList.concat([])
+  let lastYearListCopy = [...lastYearList, ...[]]
+  let thisYearListCopy = [...lastYearList, ...[]]
 
   if (isMonth) {
     lastYearListCopy = lastYearListCopy.reverse()

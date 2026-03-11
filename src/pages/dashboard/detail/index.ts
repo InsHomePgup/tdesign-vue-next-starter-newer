@@ -111,7 +111,7 @@ export function getScatterDataSet({
       {
         name: t(`pages.dashboardDetail.procurement.goods.coffeeMachine`),
         symbolSize: 10,
-        data: inArray.concat(inArray.reverse()),
+        data: [...inArray, ...inArray.reverse()],
         type: 'scatter',
       },
     ],

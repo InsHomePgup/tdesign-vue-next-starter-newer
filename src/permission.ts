@@ -30,8 +30,8 @@ router.beforeEach(async (to, from, next) => {
 
       if (asyncRoutes && asyncRoutes.length === 0) {
         const routeList = await permissionStore.buildAsyncRoutes()
-        routeList.forEach((item: RouteRecordRaw) => {
-          router.addRoute(item)
+        routeList.forEach((item) => {
+          router.addRoute(item as RouteRecordRaw)
         })
 
         if (to.name === PAGE_NOT_FOUND_ROUTE.name) {
